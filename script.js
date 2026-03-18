@@ -168,7 +168,31 @@ function toggleLanguage() {
     setLanguage(currentLang === 'en' ? 'zh' : 'en');
 }
 
+function updatePubStats() {
+    const publications = document.querySelectorAll('.publication-item');
+    const total = publications.length;
+    let ccfA = 0, ccfB = 0, ccfC = 0;
+    
+    publications.forEach(pub => {
+        if (pub.querySelector('.ccf-a')) ccfA++;
+        else if (pub.querySelector('.ccf-b')) ccfB++;
+        else if (pub.querySelector('.ccf-c')) ccfC++;
+    });
+    
+    const totalEl = document.getElementById('pub-total');
+    const ccfAEl = document.getElementById('pub-ccf-a');
+    const ccfBEl = document.getElementById('pub-ccf-b');
+    const ccfCEl = document.getElementById('pub-ccf-c');
+    
+    if (totalEl) totalEl.textContent = total;
+    if (ccfAEl) ccfAEl.textContent = ccfA;
+    if (ccfBEl) ccfBEl.textContent = ccfB;
+    if (ccfCEl) ccfCEl.textContent = ccfC;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    updatePubStats();
+    
     const savedLang = localStorage.getItem('lang');
     if (savedLang) {
         currentLang = savedLang;
