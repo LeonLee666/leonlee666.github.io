@@ -235,6 +235,10 @@ body {
     fill: white;
 }
 
+.social-link svg text {
+    fill: white;
+}
+
 .hero-image {
     display: flex;
     justify-content: center;
