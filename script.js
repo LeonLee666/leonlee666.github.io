@@ -165,7 +165,23 @@ function setLanguage(lang) {
 }
 
 function toggleLanguage() {
-    setLanguage(currentLang === 'en' ? 'zh' : 'en');
+    const newLang = currentLang === 'en' ? 'zh' : 'en';
+    setLanguage(newLang);
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentSection = urlParams.get('section');
+    updateUrlParams(currentSection);
+}
+
+function updateUrlParams(section) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', currentLang);
+    if (section) {
+        url.searchParams.set('section', section);
+        url.hash = '';
+    } else {
+        url.searchParams.delete('section');
+    }
+    window.history.replaceState({}, '', url.toString());
 }
 
 function updatePubStats() {
@@ -193,11 +209,37 @@ function updatePubStats() {
 document.addEventListener('DOMContentLoaded', function() {
     updatePubStats();
     
-    const savedLang = localStorage.getItem('lang');
-    if (savedLang) {
-        currentLang = savedLang;
-        setLanguage(savedLang);
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+    const urlSection = urlParams.get('section');
+    const urlHash = window.location.hash.slice(1);
+    
+    if (urlLang && (urlLang === 'en' || urlLang === 'zh')) {
+        currentLang = urlLang;
+        setLanguage(urlLang);
+    } else {
+        const savedLang = localStorage.getItem('lang');
+        if (savedLang) {
+            currentLang = savedLang;
+            setLanguage(savedLang);
+        }
     }
+    
+    const targetSection = urlSection || urlHash;
+    if (targetSection) {
+        const target = document.getElementById(targetSection);
+        if (target) {
+            setTimeout(() => {
+                const offsetTop = target.offsetTop - 70;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+    }
+    
+    updateUrlParams(targetSection || null);
     
     const langSwitch = document.getElementById('langSwitch');
     if (langSwitch) {
@@ -236,13 +278,16 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const href = this.getAttribute('href');
+            const target = document.querySelector(href);
             if (target) {
+                const sectionId = href.slice(1);
                 const offsetTop = target.offsetTop - 70;
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
                 });
+                updateUrlParams(sectionId);
             }
         });
     });
@@ -354,7 +399,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 检查 URL 参数是否包含成功标记
-    const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success') === 'true') {
         alert(currentLang === 'zh' ? '感谢您的留言！我会尽快回复您。' : 'Thank you for your message! I will get back to you soon.');
         window.history.replaceState({}, document.title, window.location.pathname);
