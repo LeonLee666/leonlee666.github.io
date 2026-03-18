@@ -297,6 +297,18 @@ section {
     align-items: start;
 }
 
+.about-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.work-experience h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
 .about-text p {
     margin-bottom: 1rem;
     color: var(--text-light);
@@ -735,6 +747,11 @@ section {
     .about-content {
         grid-template-columns: 1fr;
         gap: 2rem;
+    }
+    
+    .about-right {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
     .research-grid {
