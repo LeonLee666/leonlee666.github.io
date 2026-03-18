@@ -469,6 +469,32 @@ section {
     line-height: 1;
 }
 
+.pub-stats {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.pub-stats .stat-divider {
+    margin: 0 0.75rem;
+    color: var(--border-color);
+}
+
+.pub-stats .stat-ccf-a {
+    color: #ef4444;
+    margin-right: 0.75rem;
+}
+
+.pub-stats .stat-ccf-b {
+    color: #3b82f6;
+    margin-right: 0.75rem;
+}
+
+.pub-stats .stat-ccf-c {
+    color: #22c55e;
+}
+
 .pub-badges {
     display: flex;
     gap: 8px;
