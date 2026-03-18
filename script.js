@@ -1,5 +1,169 @@
 // 导航栏功能
+const translations = {
+    en: {
+        'nav.home': 'Home',
+        'nav.about': 'About',
+        'nav.research': 'Research',
+        'nav.publications': 'Publications',
+        'nav.projects': 'Projects',
+        'nav.contact': 'Contact',
+        'hero.title': 'Ph.D. in Computer Science',
+        'hero.affiliation': 'Researcher, Cloud Computing Research Institute, China Telecom',
+        'hero.interests': 'Research Interests',
+        'hero.btnPublications': 'View Publications',
+        'hero.btnContact': 'Contact Me',
+        'about.title': 'About Me',
+        'about.p1': 'I am currently a Researcher at the Cloud Computing Research Institute of China Telecom, focusing on vector database research. My work centers on developing high-performance, scalable vector database systems for AI and machine learning applications.',
+        'about.p2': 'Before joining China Telecom, I worked at ByteDance in 2024 on the development of VeDB, a cloud-native database system. From 2020 to 2023, I was at Huawei Cloud working on GaussDB, a distributed relational database system. These experiences have given me extensive expertise in database internals, distributed systems, and cloud-native architectures.',
+        'about.p3': 'I received my Ph.D. and B.S. degrees in Computer Science from Northeastern University, China. I am passionate about building robust and efficient database systems that power modern data-intensive applications.',
+        'about.education': 'Education',
+        'about.phd': 'Ph.D. in Computer Science',
+        'about.bs': 'B.S. in Computer Science',
+        'about.neu': 'Northeastern University, China',
+        'research.title': 'Research Interests',
+        'research.vectorTitle': 'Vector Database',
+        'research.vectorDesc': 'High-dimensional vector indexing, approximate nearest neighbor search, vector query optimization, and vector database system architecture for AI applications.',
+        'research.cloudTitle': 'Cloud-Native Database',
+        'research.cloudDesc': 'Database disaggregation, storage-compute separation, distributed transaction processing, and cloud-native database architecture design.',
+        'research.memoryTitle': 'In-Memory Database',
+        'research.memoryDesc': 'Main-memory database systems, in-memory indexing structures, transaction processing optimization, and real-time data analytics.',
+        'research.hardwareTitle': 'Hardware-Software Codesign',
+        'research.hardwareDesc': 'FPGA and GPU acceleration for databases, hardware-aware query processing, and co-design of database systems with modern hardware architectures.',
+        'publications.title': 'Publications',
+        'publications.all': 'All',
+        'publications.conference': 'Conference',
+        'publications.journal': 'Journal',
+        'publications.viewAll': 'View All Publications',
+        'projects.title': 'Projects',
+        'projects.vectorTitle': 'Vector Database System',
+        'projects.vectorDesc': 'Developing a high-performance vector database system at China Telecom, supporting billion-scale vector indexing and real-time similarity search for AI applications.',
+        'projects.tagVectorSearch': 'Vector Search',
+        'projects.tagANN': 'ANN Index',
+        'projects.tagDistributed': 'Distributed',
+        'projects.vedbTitle': 'VeDB - Cloud-Native Database',
+        'projects.vedbDesc': 'Contributed to VeDB development at ByteDance, a cloud-native database with storage-compute separation architecture for high scalability and availability.',
+        'projects.tagCloudNative': 'Cloud-Native',
+        'projects.tagDisaggregation': 'Disaggregation',
+        'projects.gaussdbTitle': 'GaussDB - Distributed RDBMS',
+        'projects.gaussdbDesc': 'Worked on Huawei Cloud GaussDB, a distributed relational database with focus on query optimization, transaction processing, and distributed storage engine.',
+        'projects.tagDistributedDB': 'Distributed DB',
+        'projects.tagQueryOptimizer': 'Query Optimizer',
+        'contact.title': 'Contact',
+        'contact.email': 'Email',
+        'contact.address': 'Address',
+        'contact.addressDetail': 'Cloud Computing Research Institute<br>China Telecom, Beijing, China',
+        'contact.links': 'Academic Links',
+        'contact.formName': 'Your Name',
+        'contact.formEmail': 'Your Email',
+        'contact.formSubject': 'Subject',
+        'contact.formMessage': 'Message',
+        'contact.formSubmit': 'Send Message'
+    },
+    zh: {
+        'nav.home': '首页',
+        'nav.about': '关于我',
+        'nav.research': '研究方向',
+        'nav.publications': '发表论文',
+        'nav.projects': '项目经历',
+        'nav.contact': '联系方式',
+        'hero.title': '计算机科学博士',
+        'hero.affiliation': '中国电信云计算研究院 研究员',
+        'hero.interests': '研究方向',
+        'hero.btnPublications': '查看论文',
+        'hero.btnContact': '联系我',
+        'about.title': '关于我',
+        'about.p1': '我目前是中国电信云计算研究院的研究员，专注于向量数据库研究。我的工作重点是开发面向AI和机器学习应用的高性能、可扩展向量数据库系统。',
+        'about.p2': '在加入中国电信之前，我于2024年在字节跳动参与VeDB云原生数据库系统的开发。2020年至2023年，我在华为云从事GaussDB分布式关系数据库系统的工作。这些经历使我在数据库内核、分布式系统和云原生架构方面积累了丰富的专业知识。',
+        'about.p3': '我于东北大学获得计算机科学博士学位和学士学位。我热衷于构建稳健高效的数据库系统，为现代数据密集型应用提供支持。',
+        'about.education': '教育经历',
+        'about.phd': '计算机科学博士',
+        'about.bs': '计算机科学学士',
+        'about.neu': '东北大学，中国',
+        'research.title': '研究方向',
+        'research.vectorTitle': '向量数据库',
+        'research.vectorDesc': '高维向量索引、近似最近邻搜索、向量查询优化，以及面向AI应用的向量数据库系统架构。',
+        'research.cloudTitle': '云原生数据库',
+        'research.cloudDesc': '数据库解耦、存算分离、分布式事务处理，以及云原生数据库架构设计。',
+        'research.memoryTitle': '内存数据库',
+        'research.memoryDesc': '主内存数据库系统、内存索引结构、事务处理优化，以及实时数据分析。',
+        'research.hardwareTitle': '软硬件协同设计',
+        'research.hardwareDesc': 'FPGA和GPU数据库加速、硬件感知查询处理，以及现代硬件架构与数据库系统的协同设计。',
+        'publications.title': '发表论文',
+        'publications.all': '全部',
+        'publications.conference': '会议',
+        'publications.journal': '期刊',
+        'publications.viewAll': '查看全部论文',
+        'projects.title': '项目经历',
+        'projects.vectorTitle': '向量数据库系统',
+        'projects.vectorDesc': '在中国电信开发高性能向量数据库系统，支持十亿级向量索引和AI应用的实时相似性搜索。',
+        'projects.tagVectorSearch': '向量搜索',
+        'projects.tagANN': 'ANN索引',
+        'projects.tagDistributed': '分布式',
+        'projects.vedbTitle': 'VeDB - 云原生数据库',
+        'projects.vedbDesc': '在字节跳动参与VeDB开发，这是一款具有存算分离架构的云原生数据库，具备高可扩展性和高可用性。',
+        'projects.tagCloudNative': '云原生',
+        'projects.tagDisaggregation': '存算分离',
+        'projects.gaussdbTitle': 'GaussDB - 分布式关系数据库',
+        'projects.gaussdbDesc': '在华为云从事GaussDB工作，这是一款分布式关系数据库，重点关注查询优化、事务处理和分布式存储引擎。',
+        'projects.tagDistributedDB': '分布式数据库',
+        'projects.tagQueryOptimizer': '查询优化器',
+        'contact.title': '联系方式',
+        'contact.email': '邮箱',
+        'contact.address': '地址',
+        'contact.addressDetail': '中国电信云计算研究院<br>中国，北京',
+        'contact.links': '学术链接',
+        'contact.formName': '您的姓名',
+        'contact.formEmail': '您的邮箱',
+        'contact.formSubject': '主题',
+        'contact.formMessage': '留言内容',
+        'contact.formSubmit': '发送消息'
+    }
+};
+
+let currentLang = 'en';
+
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+            el.innerHTML = translations[lang][key];
+        }
+    });
+    
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang][key]) {
+            el.placeholder = translations[lang][key];
+        }
+    });
+    
+    const langSwitch = document.getElementById('langSwitch');
+    if (langSwitch) {
+        langSwitch.textContent = lang === 'en' ? '中文' : 'English';
+    }
+    
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+}
+
+function toggleLanguage() {
+    setLanguage(currentLang === 'en' ? 'zh' : 'en');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    const savedLang = localStorage.getItem('lang');
+    if (savedLang) {
+        currentLang = savedLang;
+        setLanguage(savedLang);
+    }
+    
+    const langSwitch = document.getElementById('langSwitch');
+    if (langSwitch) {
+        langSwitch.addEventListener('click', toggleLanguage);
+    }
+    
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
