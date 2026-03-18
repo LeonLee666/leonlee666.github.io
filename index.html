@@ -165,6 +165,7 @@
                 <p class="pub-venue">arXiv preprint arXiv:2602.21514, 2026</p>
                 <div class="pub-links">
                     <a href="https://arxiv.org/abs/2602.21514" class="pub-link">PDF</a>
+                    <a href="https://github.com/LeonLee666/IObench4DiskANN" class="pub-link">Code</a>
                 </div>
             </div>
             <div class="publication-item" data-type="conference">
@@ -388,19 +389,21 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form>
+                    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
                         <div class="form-group">
-                            <input type="text" data-i18n-placeholder="contact.formName" placeholder="Your Name" required>
+                            <input type="text" name="name" data-i18n-placeholder="contact.formName" placeholder="Your Name" required>
                         </div>
                         <div class="form-group">
-                            <input type="email" data-i18n-placeholder="contact.formEmail" placeholder="Your Email" required>
+                            <input type="email" name="email" data-i18n-placeholder="contact.formEmail" placeholder="Your Email" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" data-i18n-placeholder="contact.formSubject" placeholder="Subject">
+                            <input type="text" name="subject" data-i18n-placeholder="contact.formSubject" placeholder="Subject">
                         </div>
                         <div class="form-group">
-                            <textarea data-i18n-placeholder="contact.formMessage" placeholder="Message" rows="5" required></textarea>
+                            <textarea name="message" data-i18n-placeholder="contact.formMessage" placeholder="Message" rows="5" required></textarea>
                         </div>
+                        <input type="hidden" name="_next" value="https://your-domain.com/?success=true">
+                        <input type="text" name="_gotcha" style="display:none">
                         <button type="submit" class="btn btn-primary" data-i18n="contact.formSubmit">Send Message</button>
                     </form>
                 </div>

@@ -284,16 +284,40 @@ document.addEventListener('DOMContentLoaded', function() {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // 获取表单数据
             const formData = new FormData(this);
-            const name = this.querySelector('input[type="text"]').value;
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
             
-            // 显示提交成功提示
-            alert(`感谢您的留言，${name}！我会尽快回复您。`);
+            submitBtn.disabled = true;
+            submitBtn.textContent = currentLang === 'zh' ? '发送中...' : 'Sending...';
             
-            // 重置表单
-            this.reset();
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert(currentLang === 'zh' ? '感谢您的留言！我会尽快回复您。' : 'Thank you for your message! I will get back to you soon.');
+                    this.reset();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            }).catch(error => {
+                alert(currentLang === 'zh' ? '发送失败，请稍后重试或直接发送邮件至 liangneu@yeah.net' : 'Failed to send. Please try again later or email directly to liangneu@yeah.net');
+            }).finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            });
         });
+    }
+    
+    // 检查 URL 参数是否包含成功标记
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+        alert(currentLang === 'zh' ? '感谢您的留言！我会尽快回复您。' : 'Thank you for your message! I will get back to you soon.');
+        window.history.replaceState({}, document.title, window.location.pathname);
     }
     
     // 打字机效果（可选）
