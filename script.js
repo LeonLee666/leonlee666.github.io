@@ -184,6 +184,119 @@ function updateUrlParams(section) {
     window.history.replaceState({}, '', url.toString());
 }
 
+function loadPublications() {
+    const container = document.getElementById('publications-container');
+    if (!container) return;
+    
+    fetch('publications.html')
+        .then(response => response.text())
+        .then(html => {
+            container.innerHTML = html;
+            initPubFilters();
+            updatePubStats();
+            setLanguage(currentLang);
+            initSmoothScroll();
+            initScrollAnimations();
+            publicationsLoaded = true;
+        })
+        .catch(error => {
+            console.error('Failed to load publications:', error);
+            container.innerHTML = '<p style="text-align:center;color:#666;">Failed to load publications.</p>';
+            publicationsLoaded = true;
+        });
+}
+
+function initPubFilters() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const publications = document.querySelectorAll('.publication-item');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const filter = btn.dataset.filter;
+            publications.forEach(pub => {
+                if (filter === 'all' || pub.dataset.type === filter) {
+                    pub.style.display = '';
+                    pub.style.animation = 'fadeIn 0.5s ease';
+                } else {
+                    pub.style.display = 'none';
+                }
+            });
+        });
+    });
+}
+
+let smoothScrollInitialized = false;
+let publicationsLoaded = false;
+
+function initSmoothScroll() {
+    if (smoothScrollInitialized) return;
+    smoothScrollInitialized = true;
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const href = this.getAttribute('href');
+            
+            const tryScroll = () => {
+                const target = document.querySelector(href);
+                if (target) {
+                    const sectionId = href.slice(1);
+                    const offsetTop = target.offsetTop - 70;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                    updateUrlParams(sectionId);
+                    return true;
+                }
+                return false;
+            };
+            
+            if (!tryScroll() && !publicationsLoaded) {
+                const checkInterval = setInterval(() => {
+                    if (tryScroll()) {
+                        clearInterval(checkInterval);
+                    }
+                }, 100);
+                setTimeout(() => clearInterval(checkInterval), 3000);
+            }
+        });
+    });
+}
+
+let scrollObserver = null;
+
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    if (!scrollObserver) {
+        scrollObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+    }
+    
+    const animateElements = document.querySelectorAll(
+        '.research-card, .publication-item, .project-card, .timeline-item, .contact-item'
+    );
+    
+    animateElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        scrollObserver.observe(el);
+    });
+}
+
 function updatePubStats() {
     const publications = document.querySelectorAll('.publication-item');
     const total = publications.length;
@@ -207,6 +320,8 @@ function updatePubStats() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    loadPublications();
+    
     updatePubStats();
     
     const urlParams = new URLSearchParams(window.location.search);
@@ -275,72 +390,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // 平滑滚动到锚点
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const href = this.getAttribute('href');
-            const target = document.querySelector(href);
-            if (target) {
-                const sectionId = href.slice(1);
-                const offsetTop = target.offsetTop - 70;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-                updateUrlParams(sectionId);
-            }
-        });
-    });
-    
-    // 论文筛选功能
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const pubItems = document.querySelectorAll('.publication-item');
-    
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // 移除所有按钮的active类
-            filterBtns.forEach(b => b.classList.remove('active'));
-            // 给当前按钮添加active类
-            this.classList.add('active');
-            
-            const filter = this.getAttribute('data-filter');
-            
-            pubItems.forEach(item => {
-                if (filter === 'all' || item.getAttribute('data-type') === filter) {
-                    item.style.display = 'block';
-                    item.style.animation = 'fadeIn 0.5s ease';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-    });
+    initSmoothScroll();
     
     // 滚动动画
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-            }
-        });
-    }, observerOptions);
-    
-    // 观察需要动画的元素
-    const animateElements = document.querySelectorAll(
-        '.research-card, .publication-item, .project-card, .timeline-item, .contact-item'
-    );
-    
-    animateElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
+    initScrollAnimations();
     
     // 添加动画类样式
     const style = document.createElement('style');
