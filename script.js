@@ -195,14 +195,11 @@ function loadPublications() {
             initPubFilters();
             updatePubStats();
             setLanguage(currentLang);
-            initSmoothScroll();
             initScrollAnimations();
-            publicationsLoaded = true;
         })
         .catch(error => {
             console.error('Failed to load publications:', error);
             container.innerHTML = '<p style="text-align:center;color:#666;">Failed to load publications.</p>';
-            publicationsLoaded = true;
         });
 }
 
@@ -228,46 +225,28 @@ function initPubFilters() {
     });
 }
 
-let smoothScrollInitialized = false;
-let publicationsLoaded = false;
+let scrollObserver = null;
 
 function initSmoothScroll() {
-    if (smoothScrollInitialized) return;
-    smoothScrollInitialized = true;
-    
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const href = this.getAttribute('href');
-            
-            const tryScroll = () => {
-                const target = document.querySelector(href);
-                if (target) {
-                    const sectionId = href.slice(1);
-                    const offsetTop = target.offsetTop - 70;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                    updateUrlParams(sectionId);
-                    return true;
-                }
-                return false;
-            };
-            
-            if (!tryScroll() && !publicationsLoaded) {
-                const checkInterval = setInterval(() => {
-                    if (tryScroll()) {
-                        clearInterval(checkInterval);
-                    }
-                }, 100);
-                setTimeout(() => clearInterval(checkInterval), 3000);
-            }
-        });
+    document.body.addEventListener('click', function(e) {
+        const anchor = e.target.closest('a[href^="#"]');
+        if (!anchor) return;
+        
+        e.preventDefault();
+        const href = anchor.getAttribute('href');
+        const target = document.querySelector(href);
+        
+        if (target) {
+            const sectionId = href.slice(1);
+            const offsetTop = target.offsetTop - 70;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+            updateUrlParams(sectionId);
+        }
     });
 }
-
-let scrollObserver = null;
 
 function initScrollAnimations() {
     const observerOptions = {
