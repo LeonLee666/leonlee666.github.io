@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBLP学术论文分类检索UI界面</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="page-title">
+         DBLP学术论文分类检索UI界面 (CCF 2022)
+    </div>
+    <div class="search-group">
+        <input type="text" id="searchInput" placeholder="输入论文标题关键字，空格分隔" onkeydown="handleKeyDown(event)">
+        <button onclick="search()">搜索</button>
+    </div>
+
+    <!-- Checkbox sections will be dynamically generated -->
+    <div id="checkboxContainer"></div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
