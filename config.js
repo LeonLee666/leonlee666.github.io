@@ -8,26 +8,26 @@ const categoriesConfig = [
                 level: "A",
                 options: [
                     { label: "SIGMOD", value: "conf/SIGMOD", hasAssociatedJournal: true, associatedJournalValue: "journals/pacmmod" },
-                    { label: "SIGKDD", value: "conf/SIGKDD" },
                     { label: "ICDE", value: "conf/ICDE" },
-                    { label: "SIGIR", value: "conf/SIGIR" },
+                    { label: "SIGKDD", value: "conf/SIGKDD" },
                     { label: "VLDB", value: "conf/VLDB", hasAssociatedJournal: true, associatedJournalValue: "journals/pvldb" }
+                    { label: "SIGIR", value: "conf/SIGIR" },
                 ]
             },
             {
                 name: "CCF-B 类会议:",
                 level: "B",
                 options: [
-                    { label: "CIKM", value: "conf/CIKM" },
-                    { label: "WSDM", value: "conf/WSDM" },
+                    { label: "EDBT", value: "conf/EDBT" },
                     { label: "PODS", value: "conf/PODS" },
-                    { label: "DASFAA", value: "conf/DASFAA" },
-                    { label: "ECML-PKDD", value: "conf/ecml", hasAssociatedJournal: true, associatedJournalValue: "conf/pkdd" },
-                    { label: "ISWC", value: "conf/ISWC" },
+                    { label: "CIDR", value: "conf/CIDR" },
+                    { label: "CIKM", value: "conf/CIKM" },
                     { label: "ICDM", value: "conf/ICDM" },
                     { label: "ICDT", value: "conf/ICDT" },
-                    { label: "EDBT", value: "conf/EDBT" },
-                    { label: "CIDR", value: "conf/CIDR" },
+                    { label: "DASFAA", value: "conf/DASFAA" },
+                    { label: "WSDM", value: "conf/WSDM" },
+                    { label: "ECML-PKDD", value: "conf/ecml", hasAssociatedJournal: true, associatedJournalValue: "conf/pkdd" },
+                    { label: "ISWC", value: "conf/ISWC" },
                     { label: "SDM", value: "conf/SDM" },
                     { label: "RecSys", value: "conf/RecSys" }
                 ]
