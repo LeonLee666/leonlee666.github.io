@@ -10,8 +10,8 @@ const categoriesConfig = [
                     { label: "SIGMOD", value: "conf/SIGMOD", hasAssociatedJournal: true, associatedJournalValue: "journals/pacmmod" },
                     { label: "ICDE", value: "conf/ICDE" },
                     { label: "SIGKDD", value: "conf/SIGKDD" },
-                    { label: "VLDB", value: "conf/VLDB", hasAssociatedJournal: true, associatedJournalValue: "journals/pvldb" }
-                    { label: "SIGIR", value: "conf/SIGIR" },
+                    { label: "VLDB", value: "conf/VLDB", hasAssociatedJournal: true, associatedJournalValue: "journals/pvldb" },
+                    { label: "SIGIR", value: "conf/SIGIR" }
                 ]
             },
             {
